@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdarg.h>
+#include <unistd.h>
+
+#define SIZE    5
+
+int queue[SIZE];
+int front = -1, rear = -1;
+
+int checkFull()
+{
+    if((rear + 1) % SIZE == front)  return 1;
+    else return 0;
+}
+
+int checkEmpty()
+{
+    if(front == -1)  return 1;
+    else return 0;
+}
+
+void enQueue(int value)
+{
+    if(checkFull()) 
+    {
+        printf("Queue Full\n");
+        return;
+    }
+    if(front == -1) front = 0;
+    rear = (rear + 1) % SIZE;
+    queue[rear] = value;
+}
+
+int deQueue()
+{
+    int value;
+    if(checkEmpty()) 
+    {
+        printf("Queue Empty\n");
+        return -1;
+    }
+    value = queue[front];
+    if(front == rear)
+    {
+        front = rear = -1;
+    }
+    else
+    {
+        front = (front + 1) % SIZE;
+    }
+    return value;
+}
+
+void displayQueue()
+{
+    if(checkEmpty())    
+    {
+        printf("Queue Empty\n");
+        return;
+    }
+    else
+    {
+        printf("-------------------\n");
+        for(int i=front; i != rear; i=(i+1)%SIZE)
+        {
+            printf("\t%d\n", queue[i]);
+        }
+        printf("\t%d\n", queue[rear]);
+    }
+}
+
+int main()
+{
+    int value=0, i=0;
+    int arr[20];
+    while(1)
+    {
+        //đẩy dữ liệu vào Chương trình
+        enQueue(value);
+        arr[i] = deQueue();
+        printf("\t1. a[%d] = %d\n", i, arr[i]);
+
+        //đợi 1s
+        sleep(1);
+        value++;
+        i++;
+
+        //đầy 20 phần tử
+        if(i == 20)
+        {
+            printf("--------------------\n");
+            for(int j=0; j<i; j++)
+                printf("\t2. a[%d] = %d\n", j, arr[j]);
+            printf("--------------------\n");
+            i=0;
+            break;
+        }     
+    } 
+    return 0;
+}
